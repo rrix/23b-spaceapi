@@ -25,32 +25,43 @@ require 'cgi'
 require 'serialport'
 require 'json'
 
-cgi = CGI.new
+#cgi = CGI.new
 
 puts "Content-type: text/json \r\n\r\n"
 
 # Basically, this is nicked from access.rb
 
 # start by getting the current status of the lock system
-2.times.do
-    serial = SerialPort.new("/dev/ttyUSB0", 57600, 8, 1, SerialPort::NONE)
-    serial.print "e 1234\r"
-    
-    statustext = nil
-    
-    # query for status
-    serial.print "9\r"
-    sleep 1
-    continue = 1
-    while continue == 1 do
-        serial.read_timeout = -1
-        line = serial.gets
-        if line.length > 0 
-            statustext += line + "\n"
-        else 
-            continue = 0
-        end
+serial = SerialPort.new("/dev/ttyUSB0", 57600, 8, 1, SerialPort::NONE)
+serial.print "e 1234\r"
+
+# query for status
+serial.print "9\r"
+sleep 1
+continue = 1
+while continue == 1 do
+    serial.read_timeout = -1
+    line = serial.gets
+    if line.length > 0 
+        statustext += line 
+        statustext += "\r"
+    else 
+        continue = 0
     end
-    
-    
 end
+
+puts statustext
+
+#take all those nice unformatted garbages from 23b and put'm in a json
+json = "{
+    'api' : '0.11',
+    'space' : '" + config[:space_name] + "',
+    'logo' : '" + config[:logo_url] + "',
+    'icon' : ['" + config[:open_logo_url] + "', 
+              '" + config[:close_logo_url] + "'],
+    'url' : '" + config[:homepage] + "',
+    'address' : '" + config[:street_address] + "',
+    'contact' : {
+        
+    }
+}"
