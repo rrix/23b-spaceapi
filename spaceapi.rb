@@ -36,4 +36,21 @@ puts "Content-type: text/json \r\n\r\n"
     serial = SerialPort.new("/dev/ttyUSB0", 57600, 8, 1, SerialPort::NONE)
     serial.print "e 1234\r"
     
+    statustext = nil
+    
+    # query for status
+    serial.print "9\r"
+    sleep 1
+    continue = 1
+    while continue == 1 do
+        serial.read_timeout = -1
+        line = serial.gets
+        if line.length > 0 
+            statustext += line + "\n"
+        else 
+            continue = 0
+        end
+    end
+    
+    
 end
