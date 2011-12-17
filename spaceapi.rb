@@ -29,6 +29,7 @@ require 'serialport'
 require 'json'
 
 #cgi = CGI.new
+json = JSON.parse(File.read("spaceapi.conf"))
 
 puts "Content-type: text/json \r\n\r\n"
 
@@ -44,21 +45,24 @@ sleep 1
 serial.read_timeout = 1000
 lines = serial.readlines
 
+# ugly as shit
+caps = []
 for line in lines
-    puts line
+    if m = /\(\d=(\w*)\)/.match(line) then
+        caps << m.captures
+    end
 end
 
+# more ugly. Space is open when the doors are open or unlocked
+hs_open = false # because when is anyone open these days?
+
+if caps[2] == "open" then hs_open = true end
+if caps[3] == "open" then hs_open = true end
+if caps[4] == "unlocked" then hs_open = true end
+if caps[5] == "unlocked" then hs_open = true end
 
 #take all those nice unformatted garbages from 23b and put'm in a json
-#json = "{
-#    'api' : '0.11',
-#    'space' : '" + config['space_name'] + "',
-#    'logo' : '" + config['logo_url'] + "',
-#    'icon' : ['" + config['open_logo_url'] + "', 
-#              '" + config['close_logo_url'] + "'],
-#    'url' : '" + config['homepage'] + "',
-#    'address' : '" + config['street_address'] + "',
-#    'contact' : {
-#        
-#    }
-#}"
+
+json["open"] = hs_open
+
+puts JSON.generate json
