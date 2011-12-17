@@ -20,6 +20,9 @@
 #
 ###############################################################################
 
+#config = []
+#config['space_name'] = "HeatSync Labs"
+
 require 'rubygems'
 require 'cgi'
 require 'serialport'
@@ -38,30 +41,24 @@ serial.print "e 1234\r"
 # query for status
 serial.print "9\r"
 sleep 1
-continue = 1
-while continue == 1 do
-    serial.read_timeout = -1
-    line = serial.gets
-    if line.length > 0 
-        statustext += line 
-        statustext += "\r"
-    else 
-        continue = 0
-    end
+serial.read_timeout = 1000
+lines = serial.readlines
+
+for line in lines
+    puts line
 end
 
-puts statustext
 
 #take all those nice unformatted garbages from 23b and put'm in a json
-json = "{
-    'api' : '0.11',
-    'space' : '" + config[:space_name] + "',
-    'logo' : '" + config[:logo_url] + "',
-    'icon' : ['" + config[:open_logo_url] + "', 
-              '" + config[:close_logo_url] + "'],
-    'url' : '" + config[:homepage] + "',
-    'address' : '" + config[:street_address] + "',
-    'contact' : {
-        
-    }
-}"
+#json = "{
+#    'api' : '0.11',
+#    'space' : '" + config['space_name'] + "',
+#    'logo' : '" + config['logo_url'] + "',
+#    'icon' : ['" + config['open_logo_url'] + "', 
+#              '" + config['close_logo_url'] + "'],
+#    'url' : '" + config['homepage'] + "',
+#    'address' : '" + config['street_address'] + "',
+#    'contact' : {
+#        
+#    }
+#}"
