@@ -1,0 +1,11 @@
+This is a hack. A damn ugly one.
+
+Basically, it's an interface to 23b's open access control system implementing
+the spaces API v 0.11 (https://hackerspaces.nl/spaceapi/)
+
+It does lots of nasty and gross stuff, and I want you to fork this and make it
+better. :)
+
+== Using ==
+Dump it in to the webserver CGI-bin on a system connected via serial to your 
+OAC, as long as that server can handle ruby cgi.
