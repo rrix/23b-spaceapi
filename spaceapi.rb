@@ -48,7 +48,8 @@ lines = serial.readlines
 # ugly as shit
 caps = []
 for line in lines
-    if m = /\(\d=(\w*)\)/.match(line) then
+    m = /([\d])\s$/x.match(line)
+    if m then
         caps << m.captures
     end
 end
@@ -56,10 +57,10 @@ end
 # more ugly. Space is open when the doors are open or unlocked
 hs_open = false # because when is anyone open these days?
 
-if caps[2] == "open" then hs_open = true end
-if caps[3] == "open" then hs_open = true end
-if caps[4] == "unlocked" then hs_open = true end
-if caps[5] == "unlocked" then hs_open = true end
+if caps[2][0].to_i == 1 then hs_open = true end
+if caps[3][0].to_i == 1 then hs_open = true end
+if caps[4][0].to_i == 0 then hs_open = true end
+if caps[5][0].to_i == 0 then hs_open = true end
 
 #take all those nice unformatted garbages from 23b and put'm in a json
 
