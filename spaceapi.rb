@@ -31,38 +31,11 @@ require 'json'
 #cgi = CGI.new
 json = JSON.parse(File.read("spaceapi.conf"))
 
-puts "Content-type: text/json \r\n\r\n"
+puts "Content-type: text/json"
+puts "Access-Control-Allow-Origin: *\r\n\r\n"
 
-# Basically, this is nicked from access.rb
-
-# start by getting the current status of the lock system
-serial = SerialPort.new("/dev/ttyUSB0", 57600, 8, 1, SerialPort::NONE)
-serial.print "e 1234\r"
-
-# query for status
-serial.print "9\r"
-sleep 1
-serial.read_timeout = 1000
-lines = serial.readlines
-
-# ugly as shit
-caps = []
-for line in lines
-    m = /([\d])\s$/x.match(line)
-    if m then
-        caps << m.captures
-    end
-end
-
-# more ugly. Space is open when the doors are open or unlocked
-hs_open = false # because when is anyone open these days?
-
-if caps[2][0].to_i == 1 then hs_open = true end
-if caps[3][0].to_i == 1 then hs_open = true end
-if caps[4][0].to_i == 0 then hs_open = true end
-if caps[5][0].to_i == 0 then hs_open = true end
-
-#take all those nice unformatted garbages from 23b and put'm in a json
+status = File.read('../cached-status')
+hs_open = ( /true/ =~ status ? true : false )
 
 json["open"] = hs_open
 
