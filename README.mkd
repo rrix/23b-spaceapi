@@ -1,0 +1,15 @@
+23b-spaceapi
+============
+
+This is an interface to 23b's open access control system implementing
+the [spaces API rel0.13](https://github.com/SpaceApi/SpaceApi)
+
+Usage
+-----
+Dump it in to the webserver CGI-bin on a system connected via serial to your 
+OAC, as long as that server can handle ruby cgi.
+
+This probably relies on a lot of assumptions. We're using a [forked
+version](https://github.com/heatsynclabs/Open_Access_Control_Ethernet) of the
+OAC, based on a Freetronics Etherten. If you want to use this please [contact
+me](http://twitter.com/rrrrrrrix) for help :)
