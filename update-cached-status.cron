@@ -1,0 +1,2 @@
+*/5 * * * * cd /home/access/public_html/cgi-bin && ruby update-cached-status.rb
+
